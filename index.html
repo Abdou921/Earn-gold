@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Earn Gold | Play Casual Games & Earn Crypto</title>
+  <style>
+    :root {
+      --bg-dark: #0b0c10;
+      --bg-card: #14161f;
+      --bg-card-hover: #1b1e2b;
+      --gold-primary: #f5b942;
+      --gold-light: #ffd875;
+      --gold-dark: #b8821c;
+      --text-main: #f4f4f6;
+      --text-muted: #9ca3af;
+      --border-gold: rgba(245, 185, 66, 0.28);
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header / Navbar */
+    header {
+      background: linear-gradient(180deg, #161822 0%, #0b0c10 100%);
+      border-bottom: 1px solid var(--border-gold);
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, var(--gold-light), var(--gold-primary), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-icon {
+      font-size: 1.6rem;
+      -webkit-text-fill-color: initial;
+    }
+
+    .wallet-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .balance-pill {
+      background: rgba(245, 185, 66, 0.12);
+      border: 1px solid var(--border-gold);
+      padding: 7px 14px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .balance-pill span.usdt {
+      color: var(--success);
+      font-size: 0.85rem;
+      border-left: 1px solid rgba(255,255,255,0.15);
+      padding-left: 8px;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+      color: #111;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(245, 185, 66, 0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold-primary);
+      border: 1px solid var(--gold-primary);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-outline:hover {
+      background: rgba(245, 185, 66, 0.12);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 16px 60px;
+      flex: 1;
+    }
+
+    /* Ad Space Banner */
+    .ad-slot {
+      background: repeating-linear-gradient(
+        -45deg,
+        #12141c,
+        #12141c 10px,
+        #161923 10px,
+        #161923 20px
+      );
+      border: 1px dashed var(--border-gold);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .ad-tag {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold-primary);
+      background: rgba(0,0,0,0.6);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .ad-slot p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    /* Hero Banner */
+    .hero {
+      background: radial-gradient(circle at top right, rgba(245, 185, 66, 0.18), transparent 60%), var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .hero h1 {
+      font-size: 1.7rem;
+      margin-bottom: 6px;
+      color: var(--gold-light);
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 560px;
+    }
+
+    /* Navigation Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 22px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .tab-btn {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: rgba(245, 185, 66, 0.16);
+      color: var(--gold-light);
+      border-color: var(--gold-primary);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* Games Grid */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card h3 {
+      color: var(--gold-light);
+      margin-bottom: 6px;
+      font-size: 1.15rem;
+    }
+
+    .card p.desc {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+    }
+
+    /* Game 1: Spin Wheel */
+    .wheel-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin: 10px 0;
+    }
+
+    .wheel-display {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 6px solid var(--gold-primary);
+      background: conic-gradient(
+        #1f2433 0deg 60deg,
+        #2d2412 60deg 120deg,
+        #1f2433 120deg 180deg,
+        #2d2412 180deg 240deg,
+        #1f2433 240deg 300deg,
+        #2d2412 300deg 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--gold-light);
+      box-shadow: 0 0 25px rgba(245, 185, 66, 0.25);
+      transition: transform 2s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    }
+
+    /* Game 2: Gold Miner Tap */
+    .miner-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 10px 0;
+    }
+
+    .gold-rock {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--gold-light), var(--gold-primary), var(--gold-dark));
+      border: 4px solid #fff3c4;
+      font-size: 2.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 0 24px rgba(245, 185, 66, 0.4);
+      transition: transform 0.06s ease;
+    }
+
+    .gold-rock:active {
+      transform: scale(0.92);
+    }
+
+    /* Game 3: Memory Match */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 10px 0 14px;
+    }
+
+    .mem-card {
+      aspect-ratio: 1;
+      background: #1f2332;
+      border: 1px solid var(--border-gold);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .mem-card.revealed, .mem-card.matched {
+      background: rgba(245, 185, 66, 0.22);
+      border-color: var(--gold-light);
+    }
+
+    /* Crypto Wallet Form */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      background: #0e1017;
+      border: 1px solid var(--border-gold);
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    th {
+      color: var(--gold-primary);
+    }
+
+    .badge-pending {
+      background: rgba(245, 185, 66, 0.18);
+      color: var(--gold-light);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #1b1e2b;
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-light);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid var(--border-gold);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <span class="brand-icon">👑</span>
+      <span>EARN GOLD</span>
+    </div>
+    <div class="wallet-bar">
+      <div class="balance-pill">
+        <span>🪙 <span id="coinBalance">0</span> Gold</span>
+        <span class="usdt">≈ $<span id="usdtBalance">0.00</span> USDT</span>
+      </div>
+      <button class="btn-outline" onclick="claimDailyBonus()" id="dailyBtn">🎁 Daily Bonus (+250)</button>
+      <button class="btn-gold" onclick="switchTab('wallet')">💸 Withdraw Crypto</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- TOP GLOBAL AD SLOT -->
+    <div class="ad-slot" id="top-ad-banner">
+      <span class="ad-tag">Sponsored Ad</span>
+      <p>📢 <strong>ADVERTISEMENT SPACE (728x90)</strong> — Place your Google AdSense, AdsTerra, Monetag, or Global Sponsor Banner code here.</p>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div>
+        <h1>Play Casual Games. Mine Gold. Cash Out in Crypto.</h1>
+        <p>Available worldwide. Play fun mini-games daily, collect Gold Coins, and redeem your rewards directly to your USDT, Solana (SOL), or TON wallet.</p>
+      </div>
+      <div>
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">Exchange Rate</div>
+        <div style="font-size:1.15rem; font-weight:700; color:var(--gold-light);">1,000 Gold = $1.00 USDT</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-games" onclick="switchTab('games')">🎮 Play Games</button>
+      <button class="tab-btn" id="tab-wallet" onclick="switchTab('wallet')">💳 Crypto Cashout</button>
+      <button class="tab-btn" id="tab-leaderboard" onclick="switchTab('leaderboard')">🏆 Global Leaderboard</button>
+      <button class="tab-btn" id="tab-ads" onclick="switchTab('ads')">📣 Advertise With Us</button>
+    </div>
+
+    <!-- SECTION 1: GAMES -->
+    <div class="section active" id="sec-games">
+      <div class="games-grid">
+
+        <!-- Game 1: Gold Spin -->
+        <div class="card">
+          <div>
+            <h3>🎡 Gold Fortune Wheel</h3>
+            <p class="desc">Spin the wheel to win instant Gold Coins up to 500 per spin!</p>
+          </div>
+          <div class="wheel-box">
+            <div class="wheel-display" id="wheelCircle">SPIN</div>
+            <button class="btn-gold" onclick="spinWheel()" id="spinBtn">Spin Now (Free)</button>
+          </div>
+        </div>
+
+        <!-- Game 2: Gold Tap Miner -->
+        <div class="card">
+          <div>
+            <h3>⛏️ Gold Rush Tapper</h3>
+            <p class="desc">Tap the Gold Nugget as fast as possible in 10 seconds to mine coins!</p>
+          </div>
+          <div class="miner-box">
+            <div style="font-size:0.9rem; color:var(--gold-light);">
+              Time: <strong id="minerTime">10</strong>s | Mined: <strong id="minerScore">0</strong> 🪙
+            </div>
+            <div class="gold-rock" onclick="tapGold()" id="goldRock">🪙</div>
+            <button class="btn-outline" onclick="startMiner()" id="minerStartBtn">Start 10s Mining</button>
+          </div>
+        </div>
+
+        <!-- Game 3: Gold Memory Match -->
+        <div class="card">
+          <div>
+            <h3>🃏 Royal Gold Match</h3>
+            <p class="desc">Match all 4 pairs of golden treasures to win +300 Gold Coins!</p>
+          </div>
+          <div>
+            <div class="memory-grid" id="memoryGrid"></div>
+            <button class="btn-outline" style="width:100%;" onclick="initMemoryGame()">Reset Cards</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 2: CRYPTO WALLET -->
+    <div class="section" id="sec-wallet">
+      <div class="games-grid">
+        <div class="card">
+          <h3>💸 Withdraw Earnings via Crypto</h3>
+          <p class="desc">Minimum withdrawal: <strong>2,000 Gold ($2.00 USDT)</strong>. Global payouts supported.</p>
+
+          <div class="form-group">
+            <label>Select Cryptocurrency & Network</label>
+            <select id="cryptoNetwork">
+              <option value="USDT (TRC20)">USDT — Tron (TRC20)</option>
+              <option value="USDT (BEP20)">USDT — BNB Smart Chain (BEP20)</option>
+              <option value="SOL (Solana)">Solana (SOL)</option>
+              <option value="TON (Toncoin)">Toncoin (TON)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Your Wallet Address</label>
+            <input type="text" id="walletAddress" placeholder="Enter your crypto wallet address..." />
+          </div>
+
+          <div class="form-group">
+            <label>Gold Amount to Redeem</label>
+            <input type="number" id="withdrawAmount" placeholder="e.g. 2000" min="2000" />
+          </div>
+
+          <button class="btn-gold" onclick="submitWithdrawal()">Request Crypto Payout</button>
+        </div>
+
+        <div class="card">
+          <h3>📜 Withdrawal History</h3>
+          <p class="desc">Track your payout requests and transaction statuses.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Network</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable">
+              <tr>
+                <td colspan="3" style="color:var(--text-muted);">No withdrawal requests yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: GLOBAL LEADERBOARD -->
+    <div class="section" id="sec-leaderboard">
+      <div class="card">
+        <h3>🌍 Top Global Earners</h3>
+        <p class="desc">Players from around the world competing for weekly crypto prizes.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Country</th>
+              <th>Gold Mined</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🥇 #1</td>
+              <td>CryptoKing_99</td>
+              <td>🇧🇷 Brazil</td>
+              <td>148,500 🪙</td>
+            </tr>
+            <tr>
+              <td>🥈 #2</td>
+              <td>Amina_Trades</td>
+              <td>🇷🇼 Rwanda</td>
+              <td>132,200 🪙</td>
+            </tr>
+            <tr>
+              <td>🥉 #3</td>
+              <td>SolanaHunter</td>
+              <td>🇮🇳 India</td>
+              <td>119,800 🪙</td>
+            </tr>
+            <tr>
+              <td>#4</td>
+              <td>GoldRushAlex</td>
+              <td>🇳🇬 Nigeria</td>
+              <td>94,400 🪙</td>
+            </tr>
+            <tr>
+              <td>#5</td>
+              <td><strong>You (Guest Player)</strong></td>
+              <td>🌐 Global</td>
+              <td><strong id="userRankGold">0</strong> 🪙</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 4: ADVERTISE WITH US -->
+    <div class="section" id="sec-ads">
+      <div class="card">
+        <h3>📣 Advertise on Earn Gold (Global Reach)</h3>
+        <p class="desc">Promote your crypto project, YouTube channel, app, or brand to thousands of daily active gamers worldwide.</p>
+        <div class="games-grid" style="margin-bottom:0;">
+          <div style="background:#0e1017; padding:16px; border-radius:12px; border:1px solid var(--border-gold);">
+            <h4 style="color:var(--gold-light); margin-bottom:6px;">Header Banner (728x90)</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted);">Visible on every page across desktop and mobile devices.</p>
+          </div>
+          <div style="background:#0e1017; padding:16px; border-radius:12px; border:1px solid var(--border-gold);">
+            <h4 style="color:var(--gold-light); margin-bottom:6px;">Rewarded Video / Task Ads</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted);">Users watch or visit your link to earn bonus Gold Coins.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM GLOBAL AD SLOT -->
+    <div class="ad-slot" style="margin-top:24px;">
+      <span class="ad-tag">Ad Network Slot</span>
+      <p>📢 <strong>FOOTER AD BANNER</strong> — Ready for AdSense / Crypto Ad Networks (Coinzilla, Bitmedia, A-Ads).</p>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 <strong>Earn Gold</strong> — Global Casual Gaming & Crypto Rewards Platform.
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // State Management (Saved in browser localStorage)
+    let state = JSON.parse(localStorage.getItem('earnGoldState')) || {
+      coins: 500,
+      lastDaily: null,
+      history: []
+    };
+
+    function saveState() {
+      localStorage.setItem('earnGoldState', JSON.stringify(state));
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('coinBalance').innerText = state.coins.toLocaleString();
+      document.getElementById('usdtBalance').innerText = (state.coins / 1000).toFixed(2);
+      document.getElementById('userRankGold').innerText = state.coins.toLocaleString();
+
+      const historyBody = document.getElementById('historyTable');
+      if (state.history.length > 0) {
+        historyBody.innerHTML = state.history.map(item => `
+          <tr>
+            <td>${item.network}<br><small style="color:var(--text-muted);">${item.address.slice(0, 8)}...${item.address.slice(-4)}</small></td>
+            <td>${item.amount} Gold ($${(item.amount / 1000).toFixed(2)})</td>
+            <td><span class="badge-pending">${item.status}</span></td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function addCoins(amount, reason) {
+      state.coins += amount;
+      saveState();
+      showToast(`+${amount} Gold Coins (${reason})!`);
+    }
+
+    // Tab Navigation
+    function switchTab(tabName) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('sec-' + tabName).classList.add('active');
+      const tabBtn = document.getElementById('tab-' + tabName);
+      if (tabBtn) tabBtn.classList.add('active');
+    }
+
+    // Daily Bonus
+    function claimDailyBonus() {
+      const today = new Date().toDateString();
+      if (state.lastDaily === today) {
+        showToast('You already claimed today’s bonus! Come back tomorrow.');
+        return;
+      }
+      state.lastDaily = today;
+      addCoins(250, 'Daily Bonus');
+    }
+
+    // GAME 1: Spin Wheel
+    let spinning = false;
+    let rotation = 0;
+    function spinWheel() {
+      if (spinning) return;
+      spinning = true;
+      const prizes = [50, 100, 150, 200, 300, 500];
+      const won = prizes[Math.floor(Math.random() * prizes.length)];
+      rotation += 1080 + Math.floor(Math.random() * 360);
+      const wheel = document.getElementById('wheelCircle');
+      wheel.style.transform = `rotate(${rotation}deg)`;
+      wheel.innerText = '...';
+
+      setTimeout(() => {
+        spinning = false;
+        wheel.innerText = `+${won}`;
+        addCoins(won, 'Wheel Spin');
+      }, 2000);
+    }
+
+    // GAME 2: Gold Tap Miner
+    let minerActive = false;
+    let minerPoints = 0;
+    let minerTimer = null;
+
+    function startMiner() {
+      if (minerActive) return;
+      minerActive = true;
+      minerPoints = 0;
+      let timeLeft = 10;
+      document.getElementById('minerScore').innerText = '0';
+      document.getElementById('minerTime').innerText = timeLeft;
+      document.getElementById('minerStartBtn').disabled = true;
+
+      minerTimer = setInterval(() => {
+        timeLeft--;
+        document.getElementById('minerTime').innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(minerTimer);
+          minerActive = false;
+          document.getElementById('minerStartBtn').disabled = false;
+          if (minerPoints > 0) {
+            addCoins(minerPoints, 'Gold Mining');
+          }
+        }
+      }, 1000);
+    }
+
+    function tapGold() {
+      if (!minerActive) {
+        showToast('Click "Start 10s Mining" first!');
+        return;
+      }
+      minerPoints += 5;
+      document.getElementById('minerScore').innerText = minerPoints;
+    }
+
+    // GAME 3: Memory Match
+    const icons = ['👑', '🏆', '💎', '🪙'];
+    let cards = [];
+    let flipped = [];
+    let matchedCount = 0;
+
+    function initMemoryGame() {
+      const grid = document.getElementById('memoryGrid');
+      grid.innerHTML = '';
+      flipped = [];
+      matchedCount = 0;
+      cards = [...icons, ...icons].sort(() => Math.random() - 0.5);
+
+      cards.forEach((symbol, index) => {
+        const div = document.createElement('div');
+        div.className = 'mem-card';
+        div.dataset.index = index;
+        div.dataset.symbol = symbol;
+        div.innerText = '?';
+        div.onclick = () => flipCard(div);
+        grid.appendChild(div);
+      });
+    }
+
+    function flipCard(cardEl) {
+      if (flipped.length === 2 || cardEl.classList.contains('revealed') || cardEl.classList.contains('matched')) return;
+      cardEl.classList.add('revealed');
+      cardEl.innerText = cardEl.dataset.symbol;
+      flipped.push(cardEl);
+
+      if (flipped.length === 2) {
+        const [c1, c2] = flipped;
+        if (c1.dataset.symbol === c2.dataset.symbol) {
+          c1.classList.add('matched');
+          c2.classList.add('matched');
+          flipped = [];
+          matchedCount += 2;
+          if (matchedCount === cards.length) {
+            setTimeout(() => addCoins(300, 'Memory Match Win'), 300);
+          }
+        } else {
+          setTimeout(() => {
+            c1.classList.remove('revealed');
+            c2.classList.remove('revealed');
+            c1.innerText = '?';
+            c2.innerText = '?';
+            flipped = [];
+          }, 650);
+        }
+      }
+    }
+
+    // Crypto Withdrawal
+    function submitWithdrawal() {
+      const network = document.getElementById('cryptoNetwork').value;
+      const address = document.getElementById('walletAddress').value.trim();
+      const amount = parseInt(document.getElementById('withdrawAmount').value, 10);
+
+      if (!address || address.length < 10) {
+        showToast('Please enter a valid crypto wallet address.');
+        return;
+      }
+      if (isNaN(amount) || amount < 2000) {
+        showToast('Minimum withdrawal is 2,000 Gold ($2.00 USDT).');
+        return;
+      }
+      if (amount > state.coins) {
+        showToast('Insufficient Gold balance.');
+        return;
+      }
+
+      state.coins -= amount;
+      state.history.unshift({
+        network,
+        address,
+        amount,
+        status: 'Pending Review'
+      });
+      saveState();
+      document.getElementById('withdrawAmount').value = '';
+      showToast('Crypto withdrawal request submitted!');
+    }
+
+    // Initialize
+    updateUI();
+    initMemoryGame();
+  </script>
+</body>
+      </html>
